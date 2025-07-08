@@ -76,6 +76,7 @@ for i, (true, pred) in enumerate(zip(y_test.iloc[:7], y_pred[:7]), 1):
 # ========= 9. Biểu đồ =========
 
 # 9.1 Line plot Actual vs Predicted
+
 plt.figure(figsize=(11, 4))
 plt.plot(y_test.values[:200], label="Thực tế")
 plt.plot(y_pred[:200], label="Dự đoán", alpha=0.7)
@@ -83,38 +84,49 @@ plt.title("Actual vs Predicted (200 điểm đầu)")
 plt.xlabel("Điểm dữ liệu"); plt.ylabel("Wh")
 plt.legend(); plt.grid(True); plt.show()
 
-# 9.2 Scatter Predicted vs Actual
-plt.figure(figsize=(6, 6))
-plt.scatter(y_test, y_pred, alpha=0.4)
-plt.plot([y_test.min(), y_test.max()],
-         [y_test.min(), y_test.max()], linestyle='--')
-plt.title("Scatter: Predicted vs Actual")
-plt.xlabel("Thực tế (Wh)"); plt.ylabel("Dự đoán (Wh)")
-plt.grid(True); plt.show()
+# import matplotlib.pyplot as plt
+# import matplotlib.ticker as ticker   # <- thêm dòng này
+# fig, ax = plt.subplots(figsize=(11, 4))
+# ax.plot(y_test.values[:200], label="Thực tế")
+# ax.plot(y_pred[:200], label="Dự đoán", alpha=0.7)
+# ax.set_title("Actual vs Predicted (200 điểm đầu)")
+# ax.set_xlabel("Điểm dữ liệu")
+# ax.set_ylabel("Wh")
+# ax.xaxis.set_major_locator(ticker.MultipleLocator(20))
+# ax.grid(True, which='both', axis='x')
+# ax.legend()
+# plt.tight_layout()
+# plt.show()
 
-# 9.3 Residuals vs Predicted
-plt.figure(figsize=(6, 5))
-plt.scatter(y_pred, residuals, alpha=0.4)
-plt.axhline(0, linestyle='--')
-plt.title("Residuals vs Predicted")
-plt.xlabel("Dự đoán (Wh)"); plt.ylabel("Residual (Wh)")
-plt.grid(True); plt.show()
 
-# 9.4 Histogram Residuals
-plt.figure(figsize=(6, 4))
-plt.hist(residuals, bins=50)
-plt.title("Histogram Residuals")
-plt.xlabel("Residual (Wh)"); plt.ylabel("Frequency")
-plt.grid(True); plt.show()
+# # 9.2 Scatter Predicted vs Actual
+# plt.figure(figsize=(6, 6))
+# plt.scatter(y_test, y_pred, alpha=0.4)
+# plt.plot([y_test.min(), y_test.max()],
+#          [y_test.min(), y_test.max()], linestyle='--')
+# plt.title("Scatter: Predicted vs Actual")
+# plt.xlabel("Thực tế (Wh)"); plt.ylabel("Dự đoán (Wh)")
+# plt.grid(True); plt.show()
 
-# 9.5 Bar chart Metrics
-plt.figure(figsize=(6, 4))
-plt.bar(metrics.keys(), metrics.values())
-plt.title("Regression Metrics")
-plt.ylabel("Value")
-plt.xticks(rotation=45); plt.grid(True, axis='y'); plt.tight_layout()
-plt.show()
+# # 9.3 Residuals vs Predicted
+# plt.figure(figsize=(6, 5))
+# plt.scatter(y_pred, residuals, alpha=0.4)
+# plt.axhline(0, linestyle='--')
+# plt.title("Residuals vs Predicted")
+# plt.xlabel("Dự đoán (Wh)"); plt.ylabel("Residual (Wh)")
+# plt.grid(True); plt.show()
 
-# ========= 10. (Tuỳ chọn) Lưu mô hình =========
-# import joblib
-# joblib.dump(pipe, "knn_energy_model.pkl")
+# # 9.4 Histogram Residuals
+# plt.figure(figsize=(6, 4))
+# plt.hist(residuals, bins=50)
+# plt.title("Histogram Residuals")
+# plt.xlabel("Residual (Wh)"); plt.ylabel("Frequency")
+# plt.grid(True); plt.show()
+
+# # 9.5 Bar chart Metrics
+# plt.figure(figsize=(6, 4))
+# plt.bar(metrics.keys(), metrics.values())
+# plt.title("Regression Metrics")
+# plt.ylabel("Value")
+# plt.xticks(rotation=45); plt.grid(True, axis='y'); plt.tight_layout()
+# plt.show()
