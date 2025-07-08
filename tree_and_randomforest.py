@@ -13,6 +13,7 @@ df['date'] = pd.to_datetime(df['date'])
 df['hour'] = df['date'].dt.hour
 df['day'] = df['date'].dt.day
 df['weekday'] = df['date'].dt.weekday
+print(df.isnull().sum())
 
 #Chọn đặc trưng đầu vào
 features = df.drop(columns=['date', 'Appliances'])  # bỏ cột date và target
@@ -27,7 +28,7 @@ dt_model.fit(X_train, y_train)
 dt_preds = dt_model.predict(X_test)
 
 #Rừng ngẫu nhiên
-rf_model = RandomForestRegressor(n_estimators=100, random_state=42)
+rf_model = RandomForestRegressor(n_estimators=50, random_state=42)
 rf_model.fit(X_train, y_train)
 rf_preds = rf_model.predict(X_test)
 
