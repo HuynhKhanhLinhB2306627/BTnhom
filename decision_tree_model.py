@@ -11,7 +11,7 @@ df['date'] = pd.to_datetime(df['date'])
 df['hour'] = df['date'].dt.hour
 df['day'] = df['date'].dt.day
 df['weekday'] = df['date'].dt.weekday
-features = df.drop(columns=['date', 'Appliances'])
+features = df.drop(columns=['date', 'Appliances', 'rv1', 'rv2'])
 target = df['Appliances']
 X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
 
