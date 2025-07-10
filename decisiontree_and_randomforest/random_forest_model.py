@@ -11,14 +11,15 @@ df = pd.read_csv("energydata_complete.csv")
 
 # Tiền xử lý dữ liệu
 # Chuyển cột 'date' sang kiểu datetime để dễ trích xuất thông tin thời gian
-# Tạo thêm các đặc trưng về thời gian: giờ, ngày, thứ trong tuần
+# Tạo thêm các đặc trưng về thời gian: tháng, thứ trong tuần, giờ, tuần trong năm, tuần trong tháng
 # Loại bỏ các cột không cần thiết khỏi tập đặc trưng (features)
 df['date'] = pd.to_datetime(df['date'])
-df['month'] = df['date'].dt.month
-df['weekday'] = df['date'].dt.weekday
-df['hour'] = df['date'].dt.hour
-df['week'] = df['date'].dt.isocalendar().week
-df['day_of_week'] = df['date'].dt.day_name()
+df['month'] = df['date'].dt.month                # Tháng trong năm
+df['weekday'] = df['date'].dt.weekday            # Thứ trong tuần (0=Thứ 2, 6=Chủ nhật)
+df['hour'] = df['date'].dt.hour                  # Giờ trong ngày
+# Tuần trong năm (ISO week)
+df['week'] = df['date'].dt.isocalendar().week    # Tuần trong năm
+# Tuần trong tháng (tính từ ngày 1)
 df['week_of_month'] = (df['date'].dt.day-1) // 7 + 1
 features = df.drop(columns=['date', 'Appliances', 'rv1', 'rv2'])  # Tập đặc trưng đầu vào
 
