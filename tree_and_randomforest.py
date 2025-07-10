@@ -16,7 +16,7 @@ df['weekday'] = df['date'].dt.weekday
 print(df.isnull().sum())
 
 #Chọn đặc trưng đầu vào
-features = df.drop(columns=['date', 'Appliances'])  # bỏ cột date và target
+features = df.drop(columns=['date', 'Appliances', 'rv1', 'rv2'])  # bỏ cột date và target
 target = df['Appliances'] # nhãn của tập dữ liệu
 
 #Tách tập huấn luyện và kiểm tra
