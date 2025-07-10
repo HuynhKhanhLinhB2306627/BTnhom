@@ -14,9 +14,12 @@ df = pd.read_csv("energydata_complete.csv")
 # Tạo thêm các đặc trưng về thời gian: giờ, ngày, thứ trong tuần
 # Loại bỏ các cột không cần thiết khỏi tập đặc trưng (features)
 df['date'] = pd.to_datetime(df['date'])
-df['hour'] = df['date'].dt.hour
-df['day'] = df['date'].dt.day
+df['month'] = df['date'].dt.month
 df['weekday'] = df['date'].dt.weekday
+df['hour'] = df['date'].dt.hour
+df['week'] = df['date'].dt.isocalendar().week
+df['day_of_week'] = df['date'].dt.day_name()
+df['week_of_month'] = (df['date'].dt.day-1) // 7 + 1
 features = df.drop(columns=['date', 'Appliances', 'rv1', 'rv2'])  # Tập đặc trưng đầu vào
 
 # Biến mục tiêu là lượng tiêu thụ thiết bị điện ('Appliances')
