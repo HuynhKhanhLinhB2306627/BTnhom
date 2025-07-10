@@ -1,44 +1,50 @@
 import pandas as pd
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 
-# Đảm bảo bạn đã tải file 'energydata_complete.csv' lên
+# Đọc dữ liệu từ file CSV
+# Dữ liệu gồm nhiều thông số đo lường tiêu thụ năng lượng trong gia đình
+
 df = pd.read_csv("energydata_complete.csv")
 
-# Xử lý dữ liệu
+# Tiền xử lý dữ liệu
+# Chuyển cột 'date' sang kiểu datetime để dễ trích xuất thông tin thời gian
+# Tạo thêm các đặc trưng về thời gian: giờ, ngày, thứ trong tuần
+# Loại bỏ các cột không cần thiết khỏi tập đặc trưng (features)
 df['date'] = pd.to_datetime(df['date'])
 df['hour'] = df['date'].dt.hour
 df['day'] = df['date'].dt.day
 df['weekday'] = df['date'].dt.weekday
-features = df.drop(columns=['date', 'Appliances', 'rv1', 'rv2'])
+features = df.drop(columns=['date', 'Appliances', 'rv1', 'rv2'])  # Tập đặc trưng đầu vào
+
+# Biến mục tiêu là lượng tiêu thụ thiết bị điện ('Appliances')
 target = df['Appliances']
+
+# Chia dữ liệu thành tập huấn luyện và tập kiểm tra (80% - 20%)
 X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
 
-# Huấn luyện mô hình cây quyết định (cây đầy đủ)
+# Khởi tạo và huấn luyện mô hình cây quyết định (Decision Tree)
 model = DecisionTreeRegressor(random_state=42)
 model.fit(X_train, y_train)
 
-# Lấy độ quan trọng của các đặc trưng từ mô hình ĐẦY ĐỦ
-importances = model.feature_importances_
-feature_names = features.columns
+# Dự đoán trên tập kiểm tra
+preds = model.predict(X_test)
 
-# Tạo DataFrame để dễ xem và vẽ
-feature_importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': importances})
-feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
+# Đánh giá chất lượng mô hình bằng các chỉ số MAE, MSE, R2
+print("\n🎯 Decision Tree")
+print("MAE:", mean_absolute_error(y_test, preds))  # Sai số tuyệt đối trung bình
+print("MSE:", mean_squared_error(y_test, preds))  # Sai số bình phương trung bình
+print("R2 Score:", r2_score(y_test, preds))       # Hệ số xác định (độ phù hợp)
 
-# In ra các đặc trưng quan trọng nhất
-print("Top 10 đặc trưng quan trọng nhất của mô hình (cây đầy đủ):")
-print(feature_importance_df.head(10))
-
-# Vẽ biểu đồ
-plt.figure(figsize=(10, 8))
-plt.barh(feature_importance_df['Feature'], feature_importance_df['Importance'])
-plt.xlabel("Độ quan trọng")
-plt.ylabel("Đặc trưng")
-plt.title("Độ quan trọng của các đặc trưng trong mô hình Decision Tree")
-plt.gca().invert_yaxis()  # Đưa đặc trưng quan trọng nhất lên trên cùng
-plt.grid(axis='x', linestyle='--', alpha=0.6)
-plt.tight_layout() # Đảm bảo các nhãn không bị cắt
-plt.savefig("feature_importance.png")
-print("\nĐã lưu biểu đồ độ quan trọng vào file: feature_importance.png")
+# Trực quan hóa: So sánh giá trị thực tế và dự đoán trên 100 điểm dữ liệu đầu tiên
+plt.figure(figsize=(12, 5))
+plt.plot(y_test.values[:100], label="Thực tế")
+plt.plot(preds[:100], label="Decision Tree Dự đoán", alpha=0.7)
+plt.title("Decision Tree: So sánh dự đoán vs thực tế (100 điểm đầu)")
+plt.xlabel("Điểm dữ liệu")
+plt.ylabel("Tiêu thụ năng lượng (Wh)")
+plt.legend()
+plt.grid(True)
+plt.show()
