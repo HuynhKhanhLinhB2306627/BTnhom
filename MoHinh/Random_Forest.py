@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, explained_variance_score
 import matplotlib.pyplot as plt
 
@@ -28,19 +28,16 @@ target = df['Appliances']
 
 # Chia dữ liệu thành tập huấn luyện và tập kiểm tra (80% - 20%)
 X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
-#----------------------------------------------------------------------------------------------------------#
 
-
-
-# Khởi tạo và huấn luyện mô hình cây quyết định (Decision Tree)
-model = DecisionTreeRegressor(random_state=42)
+# Khởi tạo và huấn luyện mô hình rừng ngẫu nhiên (Random Forest)
+model = RandomForestRegressor(n_estimators=50, random_state=42)
 model.fit(X_train, y_train)
 
 # Dự đoán trên tập kiểm tra
 preds = model.predict(X_test)
 
 # Đánh giá chất lượng mô hình bằng các chỉ số MAE, MSE, RMSE, MAPE, R2, Explained Variance
-print("\n🎯 Decision Tree")
+print("\n🎯 Random Forest")
 print("MAE:", mean_absolute_error(y_test, preds))  # Sai số tuyệt đối trung bình
 print("MSE:", mean_squared_error(y_test, preds))  # Sai số bình phương trung bình
 print("RMSE:", np.sqrt(mean_squared_error(y_test, preds)))  # Căn bậc hai của MSE
@@ -53,8 +50,8 @@ print("Explained Variance Score:", explained_variance_score(y_test, preds))  # P
 # Đường màu xanh là giá trị thực tế, đường màu cam là giá trị dự đoán.
 plt.figure(figsize=(12, 5))
 plt.plot(y_test.values[:100], label="Thực tế")
-plt.plot(preds[:100], label="Decision Tree Dự đoán", alpha=0.7)
-plt.title("Decision Tree: So sánh dự đoán vs thực tế (100 điểm đầu)")
+plt.plot(preds[:100], label="Random Forest Dự đoán", alpha=0.7)
+plt.title("Random Forest: So sánh dự đoán vs thực tế (100 điểm đầu)")
 plt.xlabel("Điểm dữ liệu")  # Trục hoành: chỉ số điểm dữ liệu
 plt.ylabel("Tiêu thụ năng lượng (Wh)")  # Trục tung: giá trị tiêu thụ năng lượng
 plt.legend()  # Hiển thị chú thích các đường
